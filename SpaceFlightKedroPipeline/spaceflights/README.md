@@ -2,11 +2,22 @@
 
 [![Powered by Kedro](https://img.shields.io/badge/powered_by-kedro-ffc900?logo=kedro)](https://kedro.org)
 
+## Screenshot
+![alt text](<kedro-pipeline.png>)
+
+
 ## Overview
+The project is about predicting the space flight price tags according to some data from companies,
+reviews, shuttles data (csv, xlsx).
 
-This is your new Kedro project, which was generated using `kedro 1.7.0`.
+As seen in the kedro viz screenshot shuttle and companies data are cleaned and put from data/01_raw to
+data/02_intermediate. Moreover,  reviews data is cleaned and then all three of them merged into model_input_table
+and moved into data/03_primary to be used in the linear regression and evaluation of the model.
 
-Take a look at the [Kedro documentation](https://docs.kedro.org) to get started.
+After applying Linear regression to merged data, r2_score is evaluated with two different type of pipeline -First is 
+active_modelling_pipeline with more parameters than candidate_modelling_pipeline to see the difference in between
+how accurately they fit to the data.
+
 
 ## Rules and guidelines
 
@@ -35,23 +46,6 @@ You can run your Kedro project with:
 kedro run
 ```
 
-## How to test your Kedro project
-
-Have a look at the file `tests/test_run.py` for instructions on how to write your tests. You can run your tests as follows:
-
-```
-pytest
-```
-
-You can configure the coverage threshold in your project's `pyproject.toml` file under the `[tool.coverage.report]` section.
-
-
-## Project dependencies
-
-To see and update the dependency requirements for your project use `requirements.txt`. You can install the project requirements with `pip install -r requirements.txt`.
-
-[Further information about project dependencies](https://docs.kedro.org/en/stable/kedro_project_setup/dependencies.html#project-specific-dependencies)
-
 ## How to work with Kedro and notebooks
 
 > Note: Using `kedro jupyter` or `kedro ipython` to run your notebook provides these variables in scope: `context`, 'session', `catalog`, and `pipelines`.
@@ -70,32 +64,3 @@ After installing Jupyter, you can start a local notebook server:
 ```
 kedro jupyter notebook
 ```
-
-### JupyterLab
-To use JupyterLab, you need to install it:
-
-```
-pip install jupyterlab
-```
-
-You can also start JupyterLab:
-
-```
-kedro jupyter lab
-```
-
-### IPython
-And if you want to run an IPython session:
-
-```
-kedro ipython
-```
-
-### How to ignore notebook output cells in `git`
-To automatically strip out all output cell contents before committing to `git`, you can use tools like [`nbstripout`](https://github.com/kynan/nbstripout). For example, you can add a hook in `.git/config` with `nbstripout --install`. This will run `nbstripout` before anything is committed to `git`.
-
-> *Note:* Your output cells will be retained locally.
-
-## Package your Kedro project
-
-[Further information about building project documentation and packaging your project](https://docs.kedro.org/en/stable/deploy/package_a_project/#package-an-entire-kedro-project)
