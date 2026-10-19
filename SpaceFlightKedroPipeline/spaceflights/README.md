@@ -1,66 +1,98 @@
-# spaceflights
+# Spaceflights
 
 [![Powered by Kedro](https://img.shields.io/badge/powered_by-kedro-ffc900?logo=kedro)](https://kedro.org)
 
-## Screenshot
-![alt text](<kedro-pipeline.png>)
-
+![Kedro Pipeline](kedro-pipeline.png)
 
 ## Overview
-The project is about predicting the space flight price tags according to some data from companies,
-reviews, shuttles data (csv, xlsx).
 
-As seen in the kedro viz screenshot shuttle and companies data are cleaned and put from data/01_raw to
-data/02_intermediate. Moreover,  reviews data is cleaned and then all three of them merged into model_input_table
-and moved into data/03_primary to be used in the linear regression and evaluation of the model.
+Spaceflights is a machine learning project that predicts spaceflight prices based on data from companies, customer reviews, and shuttles.
+It uses [Kedro](https://kedro.org) to organize data processing, feature preparation, model training, and evaluation into reproducible pipelines.
 
-After applying Linear regression to merged data, r2_score is evaluated with two different type of pipeline -First is 
-active_modelling_pipeline with more parameters than candidate_modelling_pipeline to see the difference in between
-how accurately they fit to the data.
+The goal is to prepare the raw datasets, combine them into a single model input table, and evaluate a linear regression model using the R² score.
 
+## Pipeline Architecture
 
-## Rules and guidelines
+The Kedro pipeline is organized into the following stages:
 
-In order to get the best out of the template:
+1. **Data cleaning**: The company and shuttle datasets are cleaned and transformed from `data/01_raw/` and saved to `data/02_intermediate/`.
+2. **Reviews preprocessing**: The reviews dataset is cleaned and prepared for integration with the other datasets.
+3. **Data integration**: The cleaned company, shuttle, and reviews datasets are merged into a single `model_input_table`, stored in `data/03_primary/`.
+4. **Model training**: The prepared dataset is used to train a linear regression model, and stored in `data/06_models/`
+5. **Model evaluation**: The model's performance is evaluated using the R² score.
 
-* Don't remove any lines from the `.gitignore` file we provide
-* Make sure your results can be reproduced by following a data engineering convention
-* Don't commit data to your repository
-* Don't commit any credentials or your local configuration to your repository. Keep all your credentials and local configuration in `conf/local/`
-
-## How to install dependencies
-
-Declare any dependencies in `requirements.txt` for `pip` installation.
-
-To install them, run:
+## Project Structure
 
 ```
+spaceflights/
+├── conf/
+│   ├── base/                  # Shared configuration (catalog, parameters)
+│   └── local/                 # Local settings and credentials (not committed)
+├── data/
+│   ├── 01_raw/                # Original, immutable data (companies, reviews, shuttles)
+│   ├── 02_intermediate/       # Cleaned and typed data
+│   ├── 03_primary/            # Merged model_input_table
+│   ├── 04_feature/            # Engineered features
+│   ├── 05_model_input/        # Train/test splits
+│   ├── 06_models/             # Trained models
+│   ├── 07_model_output/       # Model predictions
+│   └── 08_reporting/          # Reports and visualizations
+├── docs/                      # Project documentation
+├── notebooks/                 # Jupyter notebooks
+├── src/
+│   └── spaceflights/
+│       ├── pipelines/
+│       │   ├── data_processing/   # Cleaning and merging nodes
+│       │   └── data_science/      # Training and evaluation nodes
+│       ├── pipeline_registry.py
+│       ├── settings.py
+│       └── __main__.py
+├── tests/                     # Unit and pipeline tests
+├── kedro-pipeline.png
+├── pyproject.toml
+├── requirements.txt
+└── README.md
+```
+
+## Installation
+
+Declare any dependencies in `requirements.txt`, then install them with:
+
+```bash
 pip install -r requirements.txt
 ```
 
-## How to run your Kedro pipeline
+## Running the Pipeline
 
-You can run your Kedro project with:
+Run the full Kedro project with:
 
-```
+```bash
 kedro run
 ```
 
-## How to work with Kedro and notebooks
+Run the two separate Kedro pipelines with:
+```bash
+kedro run --pipeline data_processing
+kedro run --pipeline data_science
+```
 
-> Note: Using `kedro jupyter` or `kedro ipython` to run your notebook provides these variables in scope: `context`, 'session', `catalog`, and `pipelines`.
->
-> Jupyter, JupyterLab, and IPython are already included in the project requirements by default, so once you have run `pip install -r requirements.txt` you will not need to take any extra steps before you use them.
+
+## Working with Notebooks
+
+When you use `kedro jupyter` or `kedro ipython`, the following variables are available in scope: `context`, `session`, `catalog`, and `pipelines`.
+
+Jupyter, JupyterLab, and IPython are already included in the project requirements, so after running `pip install -r requirements.txt` no extra setup is needed.
 
 ### Jupyter
-To use Jupyter notebooks in your Kedro project, you need to install Jupyter:
 
-```
+If you need to install Jupyter separately:
+
+```bash
 pip install jupyter
 ```
 
-After installing Jupyter, you can start a local notebook server:
+Then start a local notebook server:
 
-```
+```bash
 kedro jupyter notebook
 ```
