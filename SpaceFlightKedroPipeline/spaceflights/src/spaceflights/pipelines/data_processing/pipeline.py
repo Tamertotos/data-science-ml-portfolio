@@ -1,0 +1,30 @@
+"""
+This is a boilerplate pipeline 'data_processing'
+generated using Kedro 1.7.0
+"""
+
+from kedro.pipeline import Node, Pipeline, node  # noqa
+
+from .nodes import preprocess_companies, preprocess_shuttles, create_model_input_table
+
+def create_pipeline(**kwargs) -> Pipeline:
+    return Pipeline([
+        Node(
+            func=preprocess_companies,
+            inputs="companies",
+            outputs="preprocessed_companies",
+            name="preprocess_companies_node"
+        ),
+        Node(
+            func=preprocess_shuttles,
+            inputs="shuttles",
+            outputs="preprocessed_shuttles",
+            name="preprocess_shuttles_node"
+        ),
+        Node(
+            func=create_model_input_table,
+            inputs=["preprocessed_shuttles","preprocessed_companies","reviews"],
+            outputs="model_input_table",
+            name="create_model_input_table_node"
+        )
+    ])
